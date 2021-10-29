@@ -58,8 +58,15 @@ def init_game():
 
 def game_loop():
     player_location, treasure_count, treasure_list = init_game()
-    print("Availabel Command:\n 1.up\n 2.down\n 3.right\n 4.left\n 5.check \n")
-    print("Your Treasure: ", treasure_count)
+    print("Availabel Command:")
+    print("1. up")
+    print("2. down")
+    print("3. right")
+    print("4. left")
+    print("5. check: check the probable location of treasure")
+    print("6. show: show the location of the treasure")
+    print("7. grid: show grid with the probable location of treasure")
+    print("\nYour Treasure: ", treasure_count)
     print(f"You are at {player_location.to_string()} now\n")
     while True:
         command = input(" Where to go: ")
@@ -108,7 +115,7 @@ def generate_treasure():
             randint(1, GRID_SIZE-1), randint(1, GRID_SIZE))
         not_wall = check_on_grid(treasure_location)
 
-        if not_wall:
+        if not_wall or not (treasure_location.x == 6 and treasure_location.y == 1):
             treasure_location_list.append(treasure_location)
             treasure_count += 1
 
@@ -135,6 +142,8 @@ def process_command(direction: str, player_location: Point):
         show_grid_with_treasure()
     elif direction == "check":
         check_probable_treasure_coordinate()
+    elif direction == "grid":
+        show_grid_with_probable_treasure()
     else:
         print("I dont understand the direction")
 
@@ -163,6 +172,17 @@ def generate_probable_treasure_coordinate():
 def check_probable_treasure_coordinate():
     for item in probable_location:
         print(item.to_string())
+
+
+def show_grid_with_probable_treasure():
+    for i, row in enumerate(grid):
+        print("")
+        for j, col in enumerate(row):
+            if col == ".":
+                print("$", end="")
+            else:
+                print(col, end="")
+    print("")
 
 
 def update_probable_treasure_coordinate(point: Point):
